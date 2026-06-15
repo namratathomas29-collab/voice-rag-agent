@@ -1,0 +1,47 @@
+import sqlite3
+
+
+def init_db():
+    conn = sqlite3.connect("memory.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS memory (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        key TEXT,
+        value TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+def save_memory(key, value):
+    conn = sqlite3.connect("memory.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "INSERT INTO memory (key, value) VALUES (?, ?)",
+        (key, value)
+    )
+
+    conn.commit()
+    conn.close()
+
+def get_memory(key):
+    conn = sqlite3.connect("memory.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT value FROM memory WHERE key = ? ORDER BY id DESC LIMIT 1",
+        (key,)
+    )
+
+    result = cursor.fetchone()
+
+    conn.close()
+
+    if result:
+        return result[0]
+
+    return None
