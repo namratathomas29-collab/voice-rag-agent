@@ -1,0 +1,130 @@
+/* ===================================================================
+   VoiceOrb — Jarvis-style AI voice assistant orb
+=================================================================== */
+
+.vo-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 92vw;
+  max-height: 92vw;
+}
+
+/* Ambient outer glow */
+.vo-glow {
+  position: absolute;
+  inset: -18%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(47, 230, 255, 0.45) 0%,
+    rgba(47, 200, 255, 0.18) 40%,
+    transparent 70%
+  );
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+/* Core sphere wrapper */
+.vo-core {
+  position: relative;
+  width: 99%;
+  height: 99%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vo-canvas {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 26px rgba(47, 230, 255, 0.5));
+}
+
+/* Listening rings */
+.vo-ring {
+  position: absolute;
+  width: 84%;
+  height: 84%;
+  border-radius: 50%;
+  border: 2px solid rgba(47, 230, 255, 0.6);
+  box-shadow: 0 0 22px rgba(47, 230, 255, 0.4);
+  pointer-events: none;
+}
+
+/* Thinking energy arc */
+.vo-thinking-arc {
+  position: absolute;
+  width: 96%;
+  height: 96%;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: rgba(120, 245, 255, 0.95);
+  border-right-color: rgba(80, 210, 255, 0.45);
+  box-shadow: 0 0 24px rgba(47, 230, 255, 0.5);
+  pointer-events: none;
+}
+
+/* Speaking waveform ring */
+.vo-waveform {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.vo-wave-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 14px;
+  margin-left: -1.5px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #8af6ff, #2fe6ff);
+  box-shadow: 0 0 8px rgba(47, 230, 255, 0.8);
+  /* push each bar out to the orb edge, then animate its length */
+  transform-origin: center calc(-1 * (50% - 2px));
+  animation: voWave 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes voWave {
+  0% {
+    height: 8px;
+    opacity: 0.5;
+  }
+  100% {
+    height: 26px;
+    opacity: 1;
+  }
+}
+
+/* Status caption */
+.vo-caption {
+  position: absolute;
+  bottom: -14%;
+  left: 40%;
+  transform: translateX(-50%);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #9ff0ff;
+  text-shadow: 0 0 14px rgba(47, 230, 255, 0.6);
+  white-space: nowrap;
+}
+.vo-logo {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  z-index: 20;
+  pointer-events: none;
+
+  filter:
+    drop-shadow(0 0 12px rgba(47,230,255,0.9))
+    drop-shadow(0 0 25px rgba(47,230,255,0.6));
+}
