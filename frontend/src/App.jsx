@@ -202,9 +202,9 @@ export default function App() {
     <div className="app">
       {/* ===== Sidebar ===== */}
       <aside className="sidebar">
-        <h2 className="brand">
-          <span className="brand-spark"></span> Astra
-        </h2>
+        <div className="sidebar-logo">
+          <img src="/astra-logo.png" alt="Astra Logo" className="logo-image" />
+        </div>
 
         <div className="menu-card">
           <h3>Knowledge Base</h3>
