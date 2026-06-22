@@ -5,6 +5,7 @@ import "./App.css";
 export default function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [source, setSource] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [orbState, setOrbState] = useState("idle");
@@ -26,6 +27,11 @@ export default function App() {
         () => setCallSeconds((s) => s + 1),
         1000
       );
+
+      // Start listening automatically when call connects
+      setTimeout(() => {
+        startVoiceRecognition();
+      }, 1000);
     }
     return () => {
       clearTimeout(connectTimer.current);
@@ -80,12 +86,37 @@ export default function App() {
 
     const utterance = new SpeechSynthesisUtterance(text);
 
+    const voices = window.speechSynthesis.getVoices();
+
+    // Hindi / Marathi
+    if (/[\u0900-\u097F]/.test(text)) {
+
+      const hindiVoice = voices.find(
+        voice => voice.lang === "hi-IN"
+      );
+
+      if (hindiVoice) {
+        utterance.voice = hindiVoice;
+      }
+
+      utterance.lang = "hi-IN";
+    }
+    else {
+      utterance.lang = "en-IN";
+    }
+
     utterance.rate = 1;
     utterance.pitch = 1;
     utterance.volume = 1;
 
     utterance.onend = () => {
       setOrbState("idle");
+
+      if (callStatus === "active") {
+        setTimeout(() => {
+          startVoiceRecognition();
+        }, 500);
+      }
     };
 
     window.speechSynthesis.speak(utterance);
@@ -130,7 +161,12 @@ export default function App() {
   };
 
   const askQuestion = async (spokenQuestion = null) => {
-    const currentQuestion = spokenQuestion || question;
+    console.log("ASK BUTTON CLICKED");
+
+    const currentQuestion =
+      typeof spokenQuestion === "string"
+        ? spokenQuestion
+        : question;
 
     if (!currentQuestion.trim()) return;
     setLoading(true);
@@ -142,6 +178,7 @@ export default function App() {
       const data = await response.json();
 
       setAnswer(data.answer);
+      setSource(data.source);
       setOrbState("speaking");
 
       speakAnswer(data.answer);
@@ -252,8 +289,8 @@ export default function App() {
                   </div>
                   <div className="answer-content">{answer}</div>
                   <div className="answer-source">
-                    <span className="src-icon">📑</span> Source: Aero club intro
-                    lec 1.pdf
+                    <span className="src-icon">📑</span>
+                    Source: {source || "Unknown Source"}
                   </div>
                 </div>
               </div>
@@ -340,7 +377,13 @@ export default function App() {
             <div className="call-actions">
               <button
                 className={`call-action mute ${muted ? "active" : ""}`}
-                onClick={() => setMuted((m) => !m)}
+                onClick={() => {
+                  setMuted((m) => !m);
+
+                  window.speechSynthesis.cancel();
+
+                  setOrbState("idle");
+                }}
                 aria-label={muted ? "Unmute" : "Mute"}
               >
                 <svg

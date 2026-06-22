@@ -578,7 +578,8 @@ body {
 
 .glass-card {
   position: relative;
-  height: 250px;
+  height: 350px;
+  width: 350px;
   padding: 28px 30px;
   border-radius: 22px;
   background: linear-gradient(160deg,
