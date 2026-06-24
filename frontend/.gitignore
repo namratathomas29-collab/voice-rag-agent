@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.mp3
+*.wav
+*.m4a
+
+test_*.py
+voice_rag_test.py

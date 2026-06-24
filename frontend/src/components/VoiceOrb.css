@@ -97,16 +97,16 @@
   box-shadow: 0 0 8px rgba(47, 230, 255, 0.8);
   /* push each bar out to the orb edge, then animate its length */
   transform-origin: center calc(-1 * (50% - 2px));
-  animation: voWave 0.8s ease-in-out infinite alternate;
+  animation: voWave 1.6s ease-in-out infinite alternate;
 }
 
 @keyframes voWave {
   0% {
-    height: 8px;
-    opacity: 0.5;
+    height: 10px;
+    opacity: 0.6;
   }
   100% {
-    height: 26px;
+    height: 18px;
     opacity: 1;
   }
 }

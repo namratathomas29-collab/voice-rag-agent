@@ -204,9 +204,9 @@ Question:
         return response.text
 
     except Exception as e:
-         print("GEMINI ERROR:", e)
+      print("GEMINI ERROR:", e)
 
-    return (
-        "Sorry, my AI service is temporarily unavailable. "
-        "Please try again in a few moments."
-    )
+      if context.strip():
+        return context
+
+      return "No information found."

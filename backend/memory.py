@@ -51,3 +51,22 @@ def clear_memory():
         "DELETE FROM memory"
     )
     conn.commit()
+
+def search_memory(query):
+    cursor.execute(
+        """
+        SELECT message
+        FROM memory
+        WHERE message LIKE ?
+        ORDER BY id DESC
+        LIMIT 1
+        """,
+        (f"%{query}%",)
+    )
+
+    row = cursor.fetchone()
+
+    if row:
+        return row[0]
+
+    return None

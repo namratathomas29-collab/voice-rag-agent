@@ -5,6 +5,7 @@ import os
 from pydantic import BaseModel
 from backend.rag import collection
 from backend.database import init_db, save_memory, get_memory
+from backend.memory import search_memory
 from backend.rag import (
     load_text_file,
     chunk_text,
@@ -142,10 +143,20 @@ def ingest():
 @app.get("/ask")
 def ask(question: str, document: str = None):
 
+    # memory_answer = search_memory(question)
+    # print("MEMORY RESULT:", memory_answer)
+
+    # if memory_answer:
+    #     return {
+    #         "question": question,
+    #         "answer": memory_answer,
+    #         "source": "Memory"
+    #     }
+
     retrieved = retrieve_context(
-    question,
-    document
-)
+        question,
+        document
+    )
 
     context = retrieved["context"]
     source = retrieved["source"]
@@ -161,15 +172,15 @@ def ask(question: str, document: str = None):
         )
 
     except Exception as e:
-     print("FALLBACK ACTIVATED:", e)
+        print("FALLBACK ACTIVATED:", e)
 
-     answer = f"ERROR: {str(e)}"
+        answer = f"ERROR: {str(e)}"
 
     return {
-       "question": question,
-       "answer": answer,
-       "source": source
-}
+        "question": question,
+        "answer": answer,
+        "source": source
+    }
 
 @app.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):

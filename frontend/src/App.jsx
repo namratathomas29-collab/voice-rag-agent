@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import VoiceOrb from "./components/VoiceOrb";
 import "./App.css";
@@ -9,6 +10,12 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [orbState, setOrbState] = useState("idle");
+  const [savedAnswers, setSavedAnswers] = useState([]);
+  const [showSavedDrawer, setShowSavedDrawer] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [savedPulse, setSavedPulse] = useState(false);
+  const [isSavedAnswerOpen, setIsSavedAnswerOpen] = useState(false);
+  const [displayedAnswer, setDisplayedAnswer] = useState("");
 
   // Call state: "idle" | "connecting" | "active"
   const [callStatus, setCallStatus] = useState("idle");
@@ -16,6 +23,14 @@ export default function App() {
   const [muted, setMuted] = useState(false);
   const connectTimer = useRef(null);
   const tickTimer = useRef(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("astra_saved_answers");
+
+    if (saved) {
+      setSavedAnswers(JSON.parse(saved));
+    }
+  }, []);
 
   // Drive the "connecting -> active" transition and the live call timer.
   useEffect(() => {
@@ -39,6 +54,35 @@ export default function App() {
     };
   }, [callStatus]);
 
+  useEffect(() => {
+
+    if (!answer) {
+      setDisplayedAnswer("");
+      return;
+    }
+
+    setDisplayedAnswer("");
+
+    let index = 0;
+
+    const interval = setInterval(() => {
+
+      setDisplayedAnswer(
+        answer.slice(0, index)
+      );
+
+      index++;
+
+      if (index > answer.length) {
+        clearInterval(interval);
+      }
+
+    }, 15);
+
+    return () => clearInterval(interval);
+
+  }, [answer]);
+
   const startCall = () => {
     setCallSeconds(0);
     setMuted(false);
@@ -57,6 +101,47 @@ export default function App() {
     const m = String(Math.floor(total / 60)).padStart(2, "0");
     const s = String(total % 60).padStart(2, "0");
     return `${m}:${s}`;
+  };
+
+  const saveAnswer = () => {
+    console.log("Saving...");
+
+    if (!answer) {
+      console.log("No answer found");
+      return;
+    }
+
+    const newAnswer = {
+      id: Date.now(),
+      question,
+      answer,
+      savedAt: new Date().toLocaleString()
+    };
+    const alreadySaved = savedAnswers.some(
+      saved =>
+        saved.question === question &&
+        saved.answer === answer
+    );
+
+    if (alreadySaved) return;
+
+    console.log(newAnswer);
+
+    const updated = [newAnswer, ...savedAnswers];
+
+    setSavedAnswers(updated);
+
+    localStorage.setItem(
+      "astra_saved_answers",
+      JSON.stringify(updated)
+    );
+
+    console.log("Saved successfully");
+    setShowToast(true);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 2000);
   };
 
   const uploadPDF = async () => {
@@ -161,6 +246,7 @@ export default function App() {
   };
 
   const askQuestion = async (spokenQuestion = null) => {
+    window.speechSynthesis.cancel();
     console.log("ASK BUTTON CLICKED");
 
     const currentQuestion =
@@ -178,6 +264,7 @@ export default function App() {
       const data = await response.json();
 
       setAnswer(data.answer);
+      setIsSavedAnswerOpen(false);
       setSource(data.source);
       setOrbState("speaking");
 
@@ -193,6 +280,41 @@ export default function App() {
     }
     setLoading(false);
   };
+  const openSavedAnswer = (item) => {
+    window.speechSynthesis.cancel();
+
+    setAnswer(item.answer);
+
+    setQuestion(item.question);
+
+    setSource("Saved Response");
+
+    setIsSavedAnswerOpen(true);
+
+    setShowSavedDrawer(false);
+
+    setOrbState("thinking");
+
+    setTimeout(() => {
+      setOrbState("idle");
+    }, 1500);
+
+  };
+
+  const deleteSaved = (id) => {
+
+    const updated =
+      savedAnswers.filter(
+        item => item.id !== id
+      );
+
+    setSavedAnswers(updated);
+
+    localStorage.setItem(
+      "astra_saved_answers",
+      JSON.stringify(updated)
+    );
+  };
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") askQuestion();
@@ -203,7 +325,12 @@ export default function App() {
       {/* ===== Sidebar ===== */}
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <img src="/astra-logo.png" alt="Astra Logo" className="logo-image" />
+          <img
+            src="/astra-logo.png"
+            alt="Astra"
+            className="sidebar-logo"
+            onClick={() => setShowSavedDrawer(!showSavedDrawer)}
+          />
         </div>
 
         <div className="menu-card">
@@ -280,14 +407,31 @@ export default function App() {
                 <div className="lightning lightning-right" />
                 <div className="glass-card">
                   <div className="answer-header">
-                    <img
-                      src="/astra-logo.png"
-                      alt="Astra logo"
-                      className="astra-logo"
-                    />
-                    Astra Response
+                    <div className="header-left">
+                      <img
+                        src="/astra-logo.png"
+                        alt="Astra"
+                        className="astra-logo"
+                      />
+                      <span>Astra Response</span>
+                    </div>
+                    <button
+                      className={`favorite-btn ${savedPulse || isSavedAnswerOpen ? "saved" : ""
+                        }`}
+                      onClick={() => {
+                        saveAnswer();
+
+                        setSavedPulse(true);
+
+                        setTimeout(() => {
+                          setSavedPulse(false);
+                        }, 1500);
+                      }}
+                    >
+                      {isSavedAnswerOpen || savedPulse ? "❤️" : "♡"}
+                    </button>
                   </div>
-                  <div className="answer-content">{answer}</div>
+                  <div className="answer-content">{displayedAnswer}</div>
                   <div className="answer-source">
                     <span className="src-icon">📑</span>
                     Source: {source || "Unknown Source"}
@@ -431,6 +575,74 @@ export default function App() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {showSavedDrawer && (
+        <div
+          className="drawer-overlay"
+          onClick={() => setShowSavedDrawer(false)}
+        />
+      )}
+      {showSavedDrawer && (
+        <div className="saved-drawer">
+
+          <div className="saved-header">
+            ★ Saved Responses
+          </div>
+
+          {savedAnswers.length === 0 ? (
+            <p>No saved answers yet</p>
+          ) : (
+            savedAnswers.map((item, index) => (
+              <motion.div
+                key={item.id}
+                className="saved-item"
+
+                drag="x"
+
+                dragConstraints={{
+                  left: -140,
+                  right: 140
+                }}
+
+                dragSnapToOrigin={true}
+
+                whileHover={{
+                  scale: 1.03
+                }}
+
+                onDragEnd={(e, info) => {
+                  console.log("Drag:", info.offset.x);
+
+                  if (info.offset.x < -60) {
+                    openSavedAnswer(item);
+                  }
+
+                  if (info.offset.x > 60) {
+                    deleteSaved(item.id);
+                  }
+
+                }}
+              >
+                <h4>{item.question}</h4>
+
+                <p>
+                  {item.answer.slice(0, 120)}...
+                </p>
+
+                <small>
+                  {item.savedAt}
+                </small>
+
+              </motion.div>
+            ))
+          )}
+
+        </div>
+      )}
+      {showToast && (
+        <div className="save-toast">
+          ★ Answer Saved
         </div>
       )}
     </div>
