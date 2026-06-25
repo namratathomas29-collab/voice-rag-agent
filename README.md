@@ -88,19 +88,88 @@ Response Card + Voice Output
 
 ## Screenshots
 
-### Home Interface
+# 📸 Project Demonstration
 
-(Add Screenshot Here)
+## 🏠 Home Interface
 
-### Voice Calling Interface
+The futuristic dashboard displaying Astra's AI orb, response panel, knowledge base status, AI engine status, and upload functionality.
 
-(Add Screenshot Here)
-
-### Saved Responses
-
-(Add Screenshot Here)
+![Home Interface](assets/home.png.png)
 
 ---
+
+## 💬 AI Response Generation
+
+Astra answers user questions using Gemini AI combined with Retrieval-Augmented Generation (RAG).
+
+![AI Response](assets/response.png.png)
+
+![AI Response 2](assets/response2.png.png)
+
+---
+
+## 📄 PDF-Based Question Answering
+
+Users can upload PDF documents and ask questions directly from their own knowledge base.
+
+### Upload PDF
+
+![PDF Upload](assets/pdfUpload.png.png)
+
+### RAG Response
+
+![RAG Response](assets/ragResponse.png.png)
+
+![RAG Response 2](assets/ragResponse2.png.png)
+
+---
+
+## 🎤 Voice Assistant
+
+Astra supports voice interaction using Whisper Speech-to-Text and Text-to-Speech.
+
+![Voice Call](assets/call.png.png)
+
+---
+
+## ❤️ Saved Responses
+
+Users can save important AI responses for later viewing.
+
+![Saved Responses](assets/savedResponse.png.png)
+
+### Opening a Saved Response
+
+![Open Saved Response](assets/openResponse.png.png)
+
+### Viewing a Saved Response
+
+![Saved Response View](assets/responseSaved1.png.png)
+
+### Swipe to Delete
+
+![Delete Saved Response](assets/deleteResponse.png.png)
+
+---
+
+## 🧠 Memory Recall
+
+Astra remembers previous conversations using SQLite memory storage and can recall user information without sending every request to the LLM.
+
+![Memory Response](assets/memoryResponse.png.png)
+
+---
+
+## 🚀 End-to-End Workflow
+
+1. Upload your documents.
+2. Ask questions through text or voice.
+3. Astra retrieves relevant context using ChromaDB.
+4. Gemini generates intelligent answers.
+5. Responses can be spoken aloud.
+6. Important answers can be saved.
+7. Memory enables personalized conversations.
+
 
 ## Installation
 
