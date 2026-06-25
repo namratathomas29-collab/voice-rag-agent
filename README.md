@@ -94,7 +94,7 @@ Response Card + Voice Output
 
 The futuristic dashboard displaying Astra's AI orb, response panel, knowledge base status, AI engine status, and upload functionality.
 
-![Home Interface](assets/home.png.png)
+![Home Interface](assets/home.png)
 
 ---
 
@@ -102,9 +102,9 @@ The futuristic dashboard displaying Astra's AI orb, response panel, knowledge ba
 
 Astra answers user questions using Gemini AI combined with Retrieval-Augmented Generation (RAG).
 
-![AI Response](assets/response.png.png)
+![AI Response](assets/response.png)
 
-![AI Response 2](assets/response2.png.png)
+![AI Response 2](assets/response2.png)
 
 ---
 
@@ -114,13 +114,13 @@ Users can upload PDF documents and ask questions directly from their own knowled
 
 ### Upload PDF
 
-![PDF Upload](assets/pdfUpload.png.png)
+![PDF Upload](assets/pdfUpload.png)
 
 ### RAG Response
 
-![RAG Response](assets/ragResponse.png.png)
+![RAG Response](assets/ragResponse.png)
 
-![RAG Response 2](assets/ragResponse2.png.png)
+![RAG Response 2](assets/ragResponse2.png)
 
 ---
 
@@ -128,7 +128,7 @@ Users can upload PDF documents and ask questions directly from their own knowled
 
 Astra supports voice interaction using Whisper Speech-to-Text and Text-to-Speech.
 
-![Voice Call](assets/call.png.png)
+![Voice Call](assets/call.png)
 
 ---
 
@@ -136,19 +136,19 @@ Astra supports voice interaction using Whisper Speech-to-Text and Text-to-Speech
 
 Users can save important AI responses for later viewing.
 
-![Saved Responses](assets/savedResponse.png.png)
+![Saved Responses](assets/savedResponse.png)
 
 ### Opening a Saved Response
 
-![Open Saved Response](assets/openResponse.png.png)
+![Open Saved Response](assets/openResponse.png)
 
 ### Viewing a Saved Response
 
-![Saved Response View](assets/responseSaved1.png.png)
+![Saved Response View](assets/responseSaved1.png)
 
 ### Swipe to Delete
 
-![Delete Saved Response](assets/deleteResponse.png.png)
+![Delete Saved Response](assets/deleteResponse.png)
 
 ---
 
@@ -156,7 +156,7 @@ Users can save important AI responses for later viewing.
 
 Astra remembers previous conversations using SQLite memory storage and can recall user information without sending every request to the LLM.
 
-![Memory Response](assets/memoryResponse.png.png)
+![Memory Response](assets/memoryResponse.png)
 
 ---
 
