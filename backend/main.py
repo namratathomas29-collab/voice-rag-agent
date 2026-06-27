@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import UploadFile, File
+
 import os
 from pydantic import BaseModel
 from backend.rag import collection
@@ -12,7 +13,8 @@ from backend.rag import (
     create_embeddings,
     ingest_document,
     retrieve_context,
-    generate_answer
+    generate_answer,
+    collection
 )
 
 app = FastAPI()
@@ -90,8 +92,23 @@ def chat(request: ChatRequest):
             "ai_response": "I do not know where you live yet."
         }
 
+        results = collection.query(
+        query_texts=[request.message],
+        n_results=3
+    )
+
+    context = ""
+
+    if results["documents"] and len(results["documents"][0]) > 0:
+        context = "\n".join(results["documents"][0])
+
+    answer = generate_answer(
+        request.message,
+        context
+    )
+
     return {
-        "ai_response": f"You said: {request.message}"
+        "ai_response": answer
     }
 
 @app.get("/test-rag")
