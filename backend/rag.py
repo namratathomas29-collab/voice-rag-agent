@@ -13,10 +13,14 @@ conversation_history = []
 
 load_dotenv()
 
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
-print("API KEY:", os.getenv("GEMINI_API_KEY")[:10])
+api_key = os.getenv("GEMINI_API_KEY")
+
+if api_key:
+    print("API KEY:", api_key[:10] + "...")
+else:
+    print("ERROR: GEMINI_API_KEY not found!")
+
+genai.configure(api_key=api_key)
 
 
 gemini_model = genai.GenerativeModel(
