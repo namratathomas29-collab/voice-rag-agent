@@ -45,7 +45,7 @@ def chat(request: ChatRequest):
 
     message = request.message.lower()
 
-    # Save Name
+    # ---------------- SAVE NAME ----------------
     if "my name is" in message:
         name = request.message.split("my name is")[-1].strip()
 
@@ -55,7 +55,7 @@ def chat(request: ChatRequest):
             "ai_response": f"Nice to meet you, {name}. I will remember your name."
         }
 
-    # Save City
+    # ---------------- SAVE CITY ----------------
     if "i live in" in message:
         city = request.message.split("i live in")[-1].strip()
 
@@ -65,7 +65,7 @@ def chat(request: ChatRequest):
             "ai_response": f"Got it. I will remember that you live in {city}."
         }
 
-    # Recall Name
+    # ---------------- RECALL NAME ----------------
     if "what is my name" in message:
         name = get_memory("name")
 
@@ -78,7 +78,7 @@ def chat(request: ChatRequest):
             "ai_response": "I do not know your name yet."
         }
 
-    # Recall City
+    # ---------------- RECALL CITY ----------------
     if "where do i live" in message:
         city = get_memory("city")
 
@@ -91,15 +91,23 @@ def chat(request: ChatRequest):
             "ai_response": "I do not know where you live yet."
         }
 
-        results = collection.query(
+    # ---------------- RAG SEARCH ----------------
+    results = collection.query(
         query_texts=[request.message],
         n_results=3
     )
 
     context = ""
 
-    if results["documents"] and len(results["documents"][0]) > 0:
-        context = "\n".join(results["documents"][0])
+    documents = results.get("documents", [])
+
+    if (
+        documents
+        and len(documents) > 0
+        and documents[0]
+        and len(documents[0]) > 0
+    ):
+        context = "\n".join(documents[0])
 
     answer = generate_answer(
         request.message,
@@ -107,7 +115,7 @@ def chat(request: ChatRequest):
     )
 
     return {
-        "ai_response": "Rag endpoint reached"
+        "ai_response": answer
     }
 
 @app.get("/test-rag")
