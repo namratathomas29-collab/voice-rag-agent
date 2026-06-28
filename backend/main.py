@@ -24,7 +24,6 @@ app.add_middleware(
         "https://voice-rag-agent-mu.vercel.app",
         "https://voice-rag-agent-iota.vercel.app",
     ],
-    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
