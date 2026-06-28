@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import UploadFile, File
-
 import os
 from pydantic import BaseModel
 from backend.rag import collection
@@ -108,7 +107,7 @@ def chat(request: ChatRequest):
     )
 
     return {
-        "ai_response": answer
+        "ai_response": "Rag endpoint reached"
     }
 
 @app.get("/test-rag")
