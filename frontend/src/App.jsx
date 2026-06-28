@@ -152,10 +152,12 @@ export default function App() {
     const formData = new FormData();
     formData.append("file", selectedFile);
     try {
-      const response = await fetch("http://127.0.0.1:8000/upload-pdf", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://voice-rag-agent-production.up.railway.app/upload-pdf",
+        {
+          method: "POST",
+          body: formData,
+        });
       const data = await response.json();
       alert(data.message);
     } catch (error) {
@@ -259,13 +261,22 @@ export default function App() {
     setOrbState("thinking");
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/ask?question=${encodeURIComponent(currentQuestion)}`
-      );
+        "https://voice-rag-agent-production.up.railway.app/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: currentQuestion,
+          }),
+        }
+      )
       const data = await response.json();
 
       setAnswer(data.answer);
       setIsSavedAnswerOpen(false);
-      setSource(data.source);
+      setSource("knowledge base");
       setOrbState("speaking");
 
       speakAnswer(data.answer);
