@@ -23,8 +23,9 @@ app.add_middleware(
         "http://localhost:5173",
         "https://voice-rag-agent-mu.vercel.app",
         "https://voice-rag-agent-iota.vercel.app",
+        "https://voice-rag-agent-git-deploy-demo-namratathomas29-6838s-projects.vercel.app",
     ],
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
