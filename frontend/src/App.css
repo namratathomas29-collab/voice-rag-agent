@@ -181,11 +181,12 @@ body {
   border: 1px solid var(--panel-border);
   transition: border-color 0.2s, background 0.2s;
 }
-.pdf-selected{
-    border:2px solid #00f5ff;
-    box-shadow:0 0 10px rgba(0,245,255,0.8);
-    color:#00f5ff;
-    transition:all .3s ease;
+
+.pdf-selected {
+  border: 2px solid #00f5ff;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.8);
+  color: #00f5ff;
+  transition: all .3s ease;
 }
 
 .select-pdf-btn:hover {
@@ -1371,4 +1372,49 @@ body {
   color: #ff6b6b;
   cursor: pointer;
   font-size: 20px;
+}
+
+.upload-toast {
+  position: fixed;
+
+  top: 30px;
+  right: 30px;
+
+  background: #101826;
+  color: #fff;
+
+  border: 1px solid #00f7ff;
+  border-radius: 12px;
+
+  padding: 16px 24px;
+
+  box-shadow: 0 0 25px rgba(0, 255, 255, .45);
+
+  z-index: 9999;
+
+  animation: slideDown .35s ease;
+}
+
+@keyframes slideDown {
+
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+.upload-toast.success {
+  border: 1px solid #00ffe5;
+  box-shadow: 0 0 20px rgba(0, 255, 255, .4);
+}
+
+.upload-toast.warning {
+  border: 1px solid #ffb347;
+  box-shadow: 0 0 20px rgba(255, 180, 0, .35);
 }

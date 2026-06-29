@@ -51,7 +51,7 @@ def load_text_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
     
-def chunk_text(text, chunk_size=500):
+def chunk_text(text, chunk_size=350):
 
     chunks = []
 
@@ -131,20 +131,20 @@ def retrieve_context(question, document=None):
     if document:
         results = collection.query(
             query_embeddings=[question_embedding.tolist()],
-            n_results=1,
+            n_results=3,
             where={"source": f"documents/{document}"}
         )
     else:
         results = collection.query(
             query_embeddings=[question_embedding.tolist()],
-            n_results=1
+            n_results=3
         )
 
     print("\n===== CHROMA RESULTS =====")
     print(results)
     print("==========================\n")
 
-    context = results["documents"][0][0]
+    context = "\n\n".join(results["documents"][0])
     distance = results["distances"][0][0]
 
     print("DISTANCE:", distance)

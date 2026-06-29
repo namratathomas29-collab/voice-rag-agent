@@ -18,6 +18,8 @@ export default function App() {
   const [displayedAnswer, setDisplayedAnswer] = useState("");
   const [uploading, setUploading] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [showUploadToast, setShowUploadToast] = useState(false);
 
   // Call state: "idle" | "connecting" | "active"
   const [callStatus, setCallStatus] = useState("idle");
@@ -143,7 +145,12 @@ export default function App() {
   const uploadPDF = async () => {
 
     if (!selectedFile) {
-      alert("Please select a PDF first");
+      setUploadMessage("⚠️ Please select a PDF first");
+      setShowUploadToast(true);
+
+      setTimeout(() => {
+        setShowUploadToast(false);
+      }, 2500);
       return;
     }
 
@@ -159,12 +166,22 @@ export default function App() {
           body: formData,
         });
       const data = await response.json();
-      alert(data.message);
+      setUploadMessage(`✅ ${selectedFile.name} uploaded successfully`);
+      setShowUploadToast(true);
+
+      setTimeout(() => {
+        setShowUploadToast(false);
+      }, 2500);
       setSelectedFile(null);
       document.getElementById("pdfUpload").value = "";
     } catch (error) {
       console.error("[v0] upload error:", error);
-      alert("PDF upload failed");
+      setUploadMessage("❌ PDF upload failed");
+      setShowUploadToast(true);
+
+      setTimeout(() => {
+        setShowUploadToast(false);
+      }, 2500);
     }
     setUploading(false);
   };
@@ -217,7 +234,12 @@ export default function App() {
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Speech Recognition is not supported in this browser");
+      setUploadMessage("⚠️ Speech Recognition is not supported in this browser");
+      setShowUploadToast(true);
+
+      setTimeout(() => {
+        setShowUploadToast(false);
+      }, 2500);
       return;
     }
 
@@ -685,6 +707,14 @@ export default function App() {
       {showToast && (
         <div className="save-toast">
           ★ Answer Saved
+        </div>
+      )}
+      {showUploadToast && (
+        <div
+          className={`upload-toast ${uploadMessage.includes("⚠️") ? "warning" : "success"
+            }`}
+        >
+          {uploadMessage}
         </div>
       )}
     </div>
