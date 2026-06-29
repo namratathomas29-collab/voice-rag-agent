@@ -55,34 +55,27 @@ export default function App() {
   }, [callStatus]);
 
   useEffect(() => {
-
     if (!answer) {
       setDisplayedAnswer("");
       return;
     }
 
-    setDisplayedAnswer("");
-
     let index = 0;
 
+    setDisplayedAnswer("");
+
     const interval = setInterval(() => {
-
-      setDisplayedAnswer(
-        answer.slice(0, index)
-      );
-
       index++;
 
-      if (index > answer.length) {
+      setDisplayedAnswer(answer.substring(0, index));
+
+      if (index >= answer.length) {
         clearInterval(interval);
       }
-
     }, 15);
 
     return () => clearInterval(interval);
-
   }, [answer]);
-
   const startCall = () => {
     setCallSeconds(0);
     setMuted(false);
@@ -274,12 +267,23 @@ export default function App() {
       )
       const data = await response.json();
 
-      setAnswer(data.answer);
+      console.log("STATUS:", response.status);
+      console.log("FULL RESPONSE:", data);
+
+      //alert(JSON.stringify(data));
+
+      setAnswer(data.ai_response);
+
+      console.log("Answer set:", data.ai_response);
+
       setIsSavedAnswerOpen(false);
       setSource("knowledge base");
-      setOrbState("speaking");
 
-      speakAnswer(data.answer);
+      // Temporarily disable speech
+      // setOrbState("speaking");
+      // speakAnswer(data.ai_response);
+
+      setOrbState("idle");
     } catch (error) {
       console.error("[v0] ask error:", error);
       const fallback =

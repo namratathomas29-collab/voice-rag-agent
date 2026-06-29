@@ -1,0 +1,23 @@
+[33mcommit a897b6a83c576a9ae17040bbbfea00b75d14c45d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdeploy-demo[m[33m)[m
+Author: Namrata Thomas <namratathomas29@gmail.com>
+Date:   Mon Jun 29 14:59:01 2026 +0530
+
+    Fix response display and typewriter effect
+
+ ..._SPRINT_Hiring_Module_Interview_Explanation.pdf |  93 [32m+++++++++++++[m
+ frontend/src/App.jsx                               |  34 [32m+++[m[31m--[m
+ output.mp3                                         | Bin [31m0[m -> [32m27504[m bytes
+ temp.wav                                           | Bin [31m0[m -> [32m145452[m bytes
+ test.wav.m4a                                       | Bin [31m0[m -> [32m118128[m bytes
+ test2.wav.m4a                                      | Bin [31m0[m -> [32m102891[m bytes
+ test2_tts.py                                       |   9 [32m++[m
+ test_edge_play.py                                  |  16 [32m+++[m
+ test_edge_tts.py                                   |  14 [32m++[m
+ test_final_tts.py                                  |   7 [32m+[m
+ test_gemini.py                                     |   8 [32m++[m
+ test_models.py                                     |  10 [32m++[m
+ test_tts.py                                        |   7 [32m+[m
+ test_voice.py                                      |  29 [32m++++[m
+ test_whisper.py                                    |  20 [32m+++[m
+ voice_rag_test.py                                  | 153 [32m+++++++++++++++++++++[m
+ 16 files changed, 385 insertions(+), 15 deletions(-)
