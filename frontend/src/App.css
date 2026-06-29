@@ -181,6 +181,12 @@ body {
   border: 1px solid var(--panel-border);
   transition: border-color 0.2s, background 0.2s;
 }
+.pdf-selected{
+    border:2px solid #00f5ff;
+    box-shadow:0 0 10px rgba(0,245,255,0.8);
+    color:#00f5ff;
+    transition:all .3s ease;
+}
 
 .select-pdf-btn:hover {
   border-color: var(--cyan);

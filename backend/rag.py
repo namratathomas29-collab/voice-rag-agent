@@ -51,7 +51,7 @@ def load_text_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
     
-def chunk_text(text, chunk_size=100):
+def chunk_text(text, chunk_size=500):
 
     chunks = []
 
@@ -87,7 +87,11 @@ def store_in_chromadb(chunks, embeddings, source):
         metadatas=metadatas
     )
 
+import time
+
 def ingest_document(file_path):
+
+    start = time.time()
 
     if file_path.endswith(".txt"):
         text = load_text_file(file_path)
@@ -97,13 +101,26 @@ def ingest_document(file_path):
 
     else:
         raise ValueError("Unsupported file type")
-    
-    source = file_path
+
+    print("PDF Read:", time.time() - start)
+
+    start = time.time()
+
     chunks = chunk_text(text)
+
+    print("Chunking:", time.time() - start)
+
+    start = time.time()
 
     embeddings = create_embeddings(chunks)
 
-    store_in_chromadb(chunks, embeddings, source)
+    print("Embeddings:", time.time() - start)
+
+    start = time.time()
+
+    store_in_chromadb(chunks, embeddings, file_path)
+
+    print("Chroma Store:", time.time() - start)
 
     return len(chunks)
 

@@ -16,6 +16,8 @@ export default function App() {
   const [savedPulse, setSavedPulse] = useState(false);
   const [isSavedAnswerOpen, setIsSavedAnswerOpen] = useState(false);
   const [displayedAnswer, setDisplayedAnswer] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
 
   // Call state: "idle" | "connecting" | "active"
   const [callStatus, setCallStatus] = useState("idle");
@@ -123,6 +125,7 @@ export default function App() {
     const updated = [newAnswer, ...savedAnswers];
 
     setSavedAnswers(updated);
+    setIsSavedAnswerOpen(true);
 
     localStorage.setItem(
       "astra_saved_answers",
@@ -138,10 +141,14 @@ export default function App() {
   };
 
   const uploadPDF = async () => {
+
     if (!selectedFile) {
       alert("Please select a PDF first");
       return;
     }
+
+    setUploading(true);
+
     const formData = new FormData();
     formData.append("file", selectedFile);
     try {
@@ -153,10 +160,13 @@ export default function App() {
         });
       const data = await response.json();
       alert(data.message);
+      setSelectedFile(null);
+      document.getElementById("pdfUpload").value = "";
     } catch (error) {
       console.error("[v0] upload error:", error);
       alert("PDF upload failed");
     }
+    setUploading(false);
   };
 
   const speakAnswer = (text) => {
@@ -250,6 +260,7 @@ export default function App() {
         : question;
 
     if (!currentQuestion.trim()) return;
+    setIsThinking(true);
     setLoading(true);
     setOrbState("thinking");
     try {
@@ -273,6 +284,7 @@ export default function App() {
       //alert(JSON.stringify(data));
 
       setAnswer(data.ai_response);
+      setIsThinking(false);
 
       console.log("Answer set:", data.ai_response);
 
@@ -280,11 +292,11 @@ export default function App() {
       setSource("knowledge base");
 
       // Temporarily disable speech
-      // setOrbState("speaking");
-      // speakAnswer(data.ai_response);
+      setOrbState("speaking");
+      speakAnswer(data.ai_response);
 
-      setOrbState("idle");
     } catch (error) {
+      setIsThinking(false);
       console.error("[v0] ask error:", error);
       const fallback =
         "Aerodynamics is the branch of dynamics concerned with the study of air motion.";
@@ -369,11 +381,22 @@ export default function App() {
             style={{ display: "none" }}
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
-          <label htmlFor="pdfUpload" className="select-pdf-btn">
-            <span className="icon">📄</span> Select PDF
+          <label
+            htmlFor="pdfUpload"
+            className={`select-pdf-btn ${selectedFile ? "pdf-selected" : ""}`}
+          >
+            <span className="icon">📄</span>
+
+            {selectedFile
+              ? `${selectedFile.name.substring(0, 22)}${selectedFile.name.length > 22 ? "..." : ""}`
+              : "Select PDF"}
           </label>
-          <button className="upload-btn" onClick={uploadPDF}>
-            Upload PDF
+          <button
+            className="upload-btn"
+            onClick={uploadPDF}
+            disabled={uploading}
+          >
+            {uploading ? "Uploading..." : "Upload PDF"}
           </button>
         </div>
 
@@ -475,8 +498,12 @@ export default function App() {
             onChange={(e) => setQuestion(e.target.value)}
             onKeyDown={onKeyDown}
           />
-          <button className="ask-btn" onClick={askQuestion}>
-            Ask
+          <button
+            className="ask-btn"
+            onClick={askQuestion}
+            disabled={isThinking}
+          >
+            {isThinking ? "Thinking..." : "Ask"}
           </button>
           <button
             className="voice-btn"
