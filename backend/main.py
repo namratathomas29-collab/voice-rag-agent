@@ -20,11 +20,10 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",
-        "https://voice-rag-agent-mu.vercel.app",
-        "https://voice-rag-agent-iota.vercel.app",
-        "https://voice-rag-agent-git-deploy-demo-namratathomas29-6838s-projects.vercel.app",
+    "http://localhost:5173",
+    "https://voice-rag-agent-mu.vercel.app",
     ],
+    allow_origin_regex=r"https://voice-rag-agent-.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
