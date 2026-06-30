@@ -653,6 +653,12 @@ export default function App() {
           <div className="saved-header">
             ★ Saved Responses
           </div>
+          <button
+            className="back-btn"
+            onClick={() => setShowSavedDrawer(false)}
+          >
+            ← Back
+          </button>
 
           {savedAnswers.length === 0 ? (
             <p>No saved answers yet</p>
