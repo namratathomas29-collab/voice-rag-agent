@@ -1418,3 +1418,60 @@ body {
   border: 1px solid #ffb347;
   box-shadow: 0 0 20px rgba(255, 180, 0, .35);
 }
+
+/* ================= MOBILE RESPONSE LAYOUT ================= */
+
+@media screen and (max-width: 768px) {
+
+  .astra-center {
+    width: 100%;
+  }
+
+  .orb-container {
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 24px;
+
+    width: 100%;
+    height: auto;
+
+    min-height: auto;
+  }
+
+  .energy-response {
+
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+  }
+
+  .glass-card {
+    width: 92%;
+    max-width: 92%;
+    margin: 0 auto;
+
+    position: static;
+    transform: none;
+
+    border-radius: 18px;
+  }
+
+  .answer-content {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .input-section {
+
+    width: 100%;
+
+    margin-top: 20px;
+  }
+
+}

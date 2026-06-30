@@ -56,3 +56,6 @@ def get_memory(key):
         return result[0]
 
     return None
+
+def save_user_name(name):
+    save_memory("user_name", name)

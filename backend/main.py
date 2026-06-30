@@ -4,7 +4,12 @@ from fastapi import UploadFile, File
 import os
 from pydantic import BaseModel
 from backend.rag import collection
-from backend.database import init_db, save_memory, get_memory
+from backend.database import (
+    init_db,
+    save_memory,
+    get_memory,
+    save_user_name,
+)
 from backend.memory import search_memory
 from backend.rag import (
     load_text_file,
@@ -51,7 +56,7 @@ def chat(request: ChatRequest):
     if "my name is" in message:
         name = request.message.split("my name is")[-1].strip()
 
-        save_memory("name", name)
+        save_user_name(name)
 
         return {
             "ai_response": f"Nice to meet you, {name}. I will remember your name."
@@ -241,3 +246,4 @@ def get_documents():
     return {
         "documents": list(docs)
     }
+    
